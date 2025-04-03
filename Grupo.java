@@ -28,16 +28,8 @@ public class Grupo extends Curso{
 
     public void capturarDatos() {
         Scanner teclado = new Scanner(System.in);
-        super.capturarDatos(); // Captura los datos del curso
         System.out.print("Ingrese la fecha de inicio (DD/MM/AAAA): ");
         this.fechaInicio = teclado.nextLine();
-        System.out.print("Ingrese el ID del instructor: ");
-        int idInstructor = teclado.nextInt();
-        teclado.nextLine(); // Limpiar el buffer
-        this.instructor.capturarDatos(idInstructor); // Captura los datos del instructor
-        System.out.print("Ingrese la cantidad de estudiantes: ");
-        this.cantidadEstudiantes = teclado.nextInt();
-        teclado.nextLine(); // Limpiar el buffer
     }
 
     public void presentarDatos() {
