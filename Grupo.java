@@ -38,11 +38,14 @@ public class Grupo extends Curso{
         System.out.print("Ingrese la cantidad de estudiantes: ");
         this.cantidadEstudiantes = teclado.nextInt();
         teclado.nextLine(); // Limpiar el buffer
-        for (int i = 0; i < this.cantidadEstudiantes; i++) {
-            Estudiante estudiante = new Estudiante();
-            estudiante.capturarDatos(i + 1); // Captura los datos del estudiante
-            this.estudiantes.add(estudiante);
-        }
+    }
+
+    public void presentarDatos() {
+        System.out.println("\n----------Datos del grupo----------");
+        System.out.println("ID del grupo: " + this.idGrupo);
+        System.out.println("Fecha de inicio: " + this.fechaInicio);
+        System.out.println("Instructor: " + this.instructor.getNombre());
+        System.out.println("Cantidad de estudiantes: " + this.cantidadEstudiantes);
     }
 
     public String getIdGrupo() {

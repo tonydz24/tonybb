@@ -1,19 +1,19 @@
 import java.util.Scanner;
-import java.util.TreeSet;
+import java.util.ArrayList;
 
-public class Curso {
+public class Curso implements Comparable<Curso> {
     protected String idCurso;
     protected String nombreCurso;
     protected int diasDuracion;
     protected int cantidadGrupos;
-    protected TreeSet<Grupo> grupos;
+    protected ArrayList<Grupo> listaGrupos;
 
     public Curso() {
         this.idCurso = "Sin ID";
         this.nombreCurso = "Sin nombre";
         this.diasDuracion = 0;
         this.cantidadGrupos = 0;
-        this.grupos = new TreeSet<>();
+        this.listaGrupos = new ArrayList<>();
     }
 
     public Curso(String idCurso, String nombreCurso, int diasDuracion, int cantidadGrupos) {
@@ -21,20 +21,36 @@ public class Curso {
         this.nombreCurso = nombreCurso;
         this.diasDuracion = diasDuracion;
         this.cantidadGrupos = cantidadGrupos;
-        this.grupos = new TreeSet<>();
+        this.listaGrupos = new ArrayList<>();
     }
 
     public void capturarDatos() {
         Scanner teclado = new Scanner(System.in);
-        String idCurso;
         System.out.print("Ingrese el nombre del curso: ");
         this.nombreCurso = teclado.nextLine();
         System.out.print("Ingrese la duración en días: ");
         this.diasDuracion = teclado.nextInt();
-        System.out.print("Ingrese la cantidad de grupos: ");
-        this.cantidadGrupos = teclado.nextInt();
-        idCurso = this.nombreCurso.substring(0, 3).toUpperCase() + this.diasDuracion + this.nombreCurso.substring(this.nombreCurso.length() - 3).toUpperCase();
+        teclado.nextLine();
+        String idCurso = this.nombreCurso.substring(0, 3).toUpperCase() 
+                       + (int) (Math.random() * 1000) 
+                       + this.nombreCurso.substring(this.nombreCurso.length() - 3).toUpperCase();
         this.idCurso = idCurso;
+    }
+
+    public void presentarDatos() {
+        System.out.println("\n----------Datos del curso----------");
+        System.out.println("ID del curso: " + this.idCurso);
+        System.out.println("Nombre del curso: " + this.nombreCurso);
+        System.out.println("Duración en días: " + this.diasDuracion);
+        System.out.println("Cantidad de grupos: " + this.cantidadGrupos);
+        if (this.listaGrupos.isEmpty()) {
+            System.out.println("No hay grupos registrados.");
+        } else {
+            System.out.println("\n----------Grupos registrados----------");
+            for (Grupo tmp : listaGrupos) {
+                tmp.presentarDatos();
+            }
+        }
     }
 
     public String getIdCurso() {
@@ -69,11 +85,8 @@ public class Curso {
         this.cantidadGrupos = cantidadGrupos;
     }
 
-    public TreeSet<Grupo> getGrupos() {
-        return grupos;
-    }
-
-    public void setGrupos(TreeSet<Grupo> grupos) {
-        this.grupos = grupos;
+    @Override
+    public int compareTo(Curso o) {
+        return this.idCurso.compareTo(o.getIdCurso());
     }
 }

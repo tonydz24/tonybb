@@ -3,7 +3,6 @@ import java.util.TreeSet;
 import java.util.ArrayList;
 
 public class Main {
-
     public static void main(String[] args) {
         menu();
     }
@@ -29,6 +28,21 @@ public class Main {
             System.out.println("Cargando datos predeterminados...");
             //Agregar datos predeterminados aquí
         }
+
+        int contCursos = 0;
+        int contGrupos = 0;
+        int contEstudiantes = 0;
+        int contInstructores = 0;
+
+        Curso unCurso = new Curso();
+        Grupo unGrupo = new Grupo();
+        Estudiante unEstudiante = new Estudiante();
+        Instructor unInstructor = new Instructor();
+
+        TreeSet<Curso> arbolCursos = new TreeSet<>();
+        ArrayList<Grupo> listaGrupos = new ArrayList<>();
+        ArrayList<Estudiante> listaEstudiantes = new ArrayList<>();
+        ArrayList<Instructor> listaInstructores = new ArrayList<>();
         
         do {
             System.out.println("\n----------Menu Principal----------");
@@ -41,9 +55,10 @@ public class Main {
             System.out.print("Seleccione el número de la opción deseada: ");
             if (teclado.hasNextInt()) {
                 option = teclado.nextInt();
+                teclado.nextLine();
                 switch (option) {
                     case 1:
-                        menuCursos();
+                        menuCursos(unCurso, arbolCursos);
                         break;
                     case 2:
                         menuGrupos();
@@ -72,9 +87,10 @@ public class Main {
         } while (option != 6);
     }
 
-    public static void menuCursos() {
+    public static void menuCursos(Curso unCurso, TreeSet<Curso> arbolCursos) {
         Scanner teclado = new Scanner(System.in);
-        int option = 0;
+        int i = 0, option = 0;
+        String cursoBuscado = null;
 
         do {
             System.out.println("\n----------Menu Cursos----------");
@@ -84,12 +100,35 @@ public class Main {
             System.out.print("Seleccione el número de la opción deseada: ");
             if (teclado.hasNextInt()) {
                 option = teclado.nextInt();
+                teclado.nextLine();
                 switch (option) {
                     case 1:
-                        // Lógica para agregar curso
+                        unCurso = new Curso();
+                        unCurso.capturarDatos(); 
+                        arbolCursos.add(unCurso);
                         break;
                     case 2:
-                        // Lógica para consultar cursos
+                        if (arbolCursos.isEmpty()) {
+                            System.out.println("No hay cursos registrados.");
+                        } else {
+                            System.out.println("\n----------Cursos registrados----------");
+                            for (Curso tmp : arbolCursos) {
+                                System.out.println((i + 1) +  ") ID: " + tmp.getIdCurso() + " Nombre: " + tmp.getNombreCurso() + " Duración: " + tmp.getDiasDuracion() + " días");
+                                i++;
+                            }
+                            System.out.print("Escriba el ID del curso que desea consultar: ");
+                            cursoBuscado = teclado.nextLine();
+                            for (Curso tmp : arbolCursos) {
+                                if (tmp.getIdCurso().equals(cursoBuscado)) {
+                                    tmp.presentarDatos(); 
+                                    option = 100;
+                                    break;
+                                }
+                            }
+                            if (option != 100) {
+                                System.out.println("No se encontró el curso con ID: " + cursoBuscado);
+                            }
+                        }
                         break;
                     case 3:
                         System.out.println("Regresando al menú principal...");
