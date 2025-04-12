@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Instructor extends Miembro {
-    private int idInstructor;
+    private String idInstructor;
     private String gradoAcademico;
     private String areaEspecialidad;
     private int aniosExperiencia;
@@ -9,14 +9,14 @@ public class Instructor extends Miembro {
 
     public Instructor() {
         super();
-        this.idInstructor = 0;
+        this.idInstructor = "Sin ID";
         this.gradoAcademico = "Sin grado académico";
         this.areaEspecialidad = "Sin área de especialidad";
         this.aniosExperiencia = 0;
         this.correoElectronico = "Sin correo electrónico";
     }
 
-    public Instructor(String nombre, int edad, String genero, int idInstructor, String gradoAcademico, String areaEspecialidad, int aniosExperiencia, String correoElectronico) {
+    public Instructor(String nombre, int edad, String genero, String idInstructor, String gradoAcademico, String areaEspecialidad, int aniosExperiencia, String correoElectronico) {
         super(nombre, edad, genero);
         this.idInstructor = idInstructor;
         this.gradoAcademico = gradoAcademico;
@@ -25,10 +25,13 @@ public class Instructor extends Miembro {
         this.correoElectronico = correoElectronico;
     }
 
-    public void capturarDatos(int idInstructor) {
+    public void capturarDatos() {
         Scanner teclado = new Scanner(System.in);
-        super.capturarDatos(); // Captura los datos del miembro
-        this.idInstructor = idInstructor;
+        super.capturarDatos(); 
+        this.idInstructor = this.nombre.substring(0, 3).toUpperCase() 
+                          + this.edad 
+                          + this.nombre.substring(this.nombre.length() - 3).toUpperCase() 
+                          + (int) (Math.random() * 1000);
         System.out.print("Ingrese el grado académico: ");
         this.gradoAcademico = teclado.nextLine();
         System.out.print("Ingrese el área de especialidad: ");
@@ -40,11 +43,37 @@ public class Instructor extends Miembro {
         this.correoElectronico = teclado.nextLine();
     }
 
-    public int getIdInstructor() {
+    public void modificarDatos() {
+        Scanner teclado = new Scanner(System.in);
+        super.modificarDatos(); 
+        System.out.print("Ingrese el nuevo grado académico: ");
+        this.gradoAcademico = teclado.nextLine();
+        System.out.print("Ingrese el nuevo área de especialidad: ");
+        this.areaEspecialidad = teclado.nextLine();
+        System.out.print("Ingrese los nuevos años de experiencia: ");
+        this.aniosExperiencia = teclado.nextInt();
+        teclado.nextLine(); 
+        System.out.print("Ingrese el nuevo correo electrónico: ");
+        this.correoElectronico = teclado.nextLine();
+    }
+
+    public void presentarDatos() {
+        System.out.println("\n----------Datos del instructor----------");
+        System.out.println("ID del instructor: " + this.idInstructor);
+        System.out.println("Nombre: " + this.nombre);
+        System.out.println("Edad: " + this.edad);
+        System.out.println("Género: " + this.genero);
+        System.out.println("Grado académico: " + this.gradoAcademico);
+        System.out.println("Área de especialidad: " + this.areaEspecialidad);
+        System.out.println("Años de experiencia: " + this.aniosExperiencia);
+        System.out.println("Correo electrónico: " + this.correoElectronico);
+    }
+
+    public String getIdInstructor() {
         return idInstructor;
     }
 
-    public void setIdInstructor(int idInstructor) {
+    public void setIdInstructor(String idInstructor) {
         this.idInstructor = idInstructor;
     }
 

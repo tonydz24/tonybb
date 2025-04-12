@@ -19,7 +19,7 @@ public class Main {
                 option = teclado.nextInt();
             } else {
                 System.out.println("Opción inválida, por favor intente de nuevo.");
-                teclado.next(); 
+                teclado.nextLine(); 
                 option = 0; 
             }
         } while (option != 1 && option != 2);
@@ -29,19 +29,11 @@ public class Main {
             //Agregar datos predeterminados aquí
         }
 
-        int contCursos = 0;
         int contGrupos = 0;
-        int contEstudiantes = 0;
-        int contInstructores = 0;
 
         Curso unCurso = new Curso();
-        Grupo unGrupo = new Grupo();
-        Estudiante unEstudiante = new Estudiante();
-        Instructor unInstructor = new Instructor();
 
         TreeSet<Curso> arbolCursos = new TreeSet<>();
-        ArrayList<Grupo> listaGrupos = new ArrayList<>();
-        ArrayList<Estudiante> listaEstudiantes = new ArrayList<>();
         ArrayList<Instructor> listaInstructores = new ArrayList<>();
         
         do {
@@ -61,13 +53,13 @@ public class Main {
                         menuCursos(unCurso, arbolCursos);
                         break;
                     case 2:
-                        menuGrupos();
+                        menuGrupos(contGrupos, arbolCursos, listaInstructores);
                         break;
                     case 3:
                         menuEstudiantes();
                         break;
                     case 4:
-                        consultarInstructores();
+                        consultarInstructores(listaInstructores);
                         break;
                     case 5:
                         consultarEstudiantesPorGrupo();
@@ -76,7 +68,7 @@ public class Main {
                         System.out.println("Saliendo del programa...");
                         break;
                     default:
-                        System.out.println("]Opción inválida, por favor intente de nuevo.");
+                        System.out.println("Opción inválida, por favor intente de nuevo.");
                         break;
                 }
             } else {
@@ -89,10 +81,12 @@ public class Main {
 
     public static void menuCursos(Curso unCurso, TreeSet<Curso> arbolCursos) {
         Scanner teclado = new Scanner(System.in);
-        int i = 0, option = 0;
-        String cursoBuscado = null;
+        int option = 0;
 
         do {
+            int i = 0;
+            String cursoBuscado = null;
+
             System.out.println("\n----------Menu Cursos----------");
             System.out.println("1. Agregar curso");
             System.out.println("2. Consultar cursos");
@@ -145,11 +139,14 @@ public class Main {
         } while (option != 3);
     }
 
-    public static void menuGrupos() {
+    public static void menuGrupos(int contGrupos, TreeSet<Curso> arbolCursos, ArrayList<Instructor> listaInstructores) {
         Scanner teclado = new Scanner(System.in);
         int option = 0;
 
         do {
+            int i = 0;
+            String cursoBuscado = null;
+
             System.out.println("\n----------Menu Grupos----------");
             System.out.println("1. Agregar grupo");
             System.out.println("2. Modificar grupo");
@@ -158,12 +155,54 @@ public class Main {
             System.out.print("Seleccione el número de la opción deseada: ");
             if (teclado.hasNextInt()) {
                 option = teclado.nextInt();
+                teclado.nextLine();
                 switch (option) {
                     case 1:
-                        // Lógica para agregar grupo
+                        if (arbolCursos.isEmpty()) {
+                            System.out.println("No hay cursos registrados para agregar grupos.");
+                        } else {
+                            System.out.println("\n----------Cursos registrados----------");
+                            for (Curso tmp : arbolCursos) {
+                                System.out.println((i + 1) +  ") ID: " + tmp.getIdCurso() + " Nombre: " + tmp.getNombreCurso() + " Duración: " + tmp.getDiasDuracion() + " días");
+                                i++;
+                            }
+                            System.out.print("Escriba el ID del curso del cual desea crear un grupo: ");
+                            cursoBuscado = teclado.nextLine();
+                            for (Curso tmp : arbolCursos) {
+                                if (tmp.getIdCurso().equals(cursoBuscado)) {
+                                    tmp.agregarGrupo(++contGrupos); 
+                                    listaInstructores.add(tmp.getListaGrupos().get(contGrupos - 1).getInstructor());
+                                    option = 100;
+                                    break;
+                                }
+                            }
+                            if (option != 100) {
+                                System.out.println("No se encontró el curso con ID: " + cursoBuscado);
+                            }
+                        }
                         break;
                     case 2:
-                        // Lógica para modificar grupo
+                        if (arbolCursos.isEmpty()) {
+                            System.out.println("No hay cursos registrados para modificar grupos.");
+                        } else {
+                            System.out.println("\n----------Cursos registrados----------");
+                            for (Curso tmp : arbolCursos) {
+                                System.out.println((i + 1) +  ") ID: " + tmp.getIdCurso() + " Nombre: " + tmp.getNombreCurso() + " Duración: " + tmp.getDiasDuracion() + " días");
+                                i++;
+                            }
+                            System.out.print("Escriba el ID del curso del cual desea modificar un grupo: ");
+                            cursoBuscado = teclado.nextLine();
+                            for (Curso tmp : arbolCursos) {
+                                if (tmp.getIdCurso().equals(cursoBuscado)) {
+                                    tmp.modificarGrupo(listaInstructores);
+                                    option = 100;
+                                    break;
+                                }
+                            }
+                            if (option != 100) {
+                                System.out.println("No se encontró el curso con ID: " + cursoBuscado);
+                            }
+                        }
                         break;
                     case 3:
                         // Lógica para consultar grupos
@@ -196,6 +235,7 @@ public class Main {
             System.out.print("Seleccione el número de la opción deseada: ");
             if (teclado.hasNextInt()) {
                 option = teclado.nextInt();
+                teclado.nextLine();
                 switch (option) {
                     case 1:
                         // Lógica para agregar estudiante
@@ -221,8 +261,15 @@ public class Main {
         } while (option != 4);
     }
 
-    public static void consultarInstructores() {
-        // Implementar la consulta de instructores
+    public static void consultarInstructores(ArrayList<Instructor> listaInstructores) {
+        if (listaInstructores.isEmpty()) {
+            System.out.println("No hay instructores registrados.");
+        } else {
+            System.out.println("\n----------Instructores registrados----------");
+            for (Instructor tmp : listaInstructores) {
+                tmp.presentarDatos(); 
+            }
+        }
     }
 
     public static void consultarEstudiantesPorGrupo() {

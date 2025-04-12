@@ -26,10 +26,13 @@ public class Grupo extends Curso{
         this.cantidadEstudiantes = cantidadEstudiantes;
     }
 
-    public void capturarDatos() {
+    public void capturarDatos(String idCurso, int contGrupos) {
         Scanner teclado = new Scanner(System.in);
+        this.idGrupo = idCurso + "-" + contGrupos;
         System.out.print("Ingrese la fecha de inicio (DD/MM/AAAA): ");
         this.fechaInicio = teclado.nextLine();
+        System.out.println("Datos del instructor: ");
+        this.instructor.capturarDatos();
     }
 
     public void presentarDatos() {
@@ -38,6 +41,35 @@ public class Grupo extends Curso{
         System.out.println("Fecha de inicio: " + this.fechaInicio);
         System.out.println("Instructor: " + this.instructor.getNombre());
         System.out.println("Cantidad de estudiantes: " + this.cantidadEstudiantes);
+    }
+
+    public void modificarDatos() {
+        Scanner teclado = new Scanner(System.in);
+        int opcion;
+        System.out.print("Ingrese la nueva fecha de inicio (DD/MM/AAAA): ");
+        this.fechaInicio = teclado.nextLine();
+        System.out.println("Si desea modificar los datos del instructor presione 1");
+        System.out.println("Si desea agregar un nuevo instructor presione 2");
+        System.out.println("Si no quiere modificarlo presione cualquier tecla");
+        System.out.print("Respuesta: ");
+        if (teclado.hasNextInt()) {
+            opcion = teclado.nextInt();
+            teclado.nextLine();
+            if (opcion == 1) {
+                System.out.println("Datos del instructor: ");
+                this.instructor.modificarDatos();
+            } else {
+                if (opcion == 2) {
+                    this.instructor = new Instructor();
+                    System.out.println("Datos del nuevo instructor: ");
+                    this.instructor.capturarDatos();
+                } else {
+                    return;
+                }
+            }
+        } else {
+            return;
+        }       
     }
 
     public String getIdGrupo() {

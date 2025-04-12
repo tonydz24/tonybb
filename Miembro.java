@@ -28,6 +28,17 @@ public class Miembro {
         this.genero = teclado.nextLine();
     }
 
+    public void modificarDatos() {
+        Scanner teclado = new Scanner(System.in);
+        System.out.print("Ingrese el nuevo nombre: ");
+        this.nombre = teclado.nextLine();
+        System.out.print("Ingrese la nueva edad: ");
+        this.edad = teclado.nextInt();
+        teclado.nextLine(); 
+        System.out.print("Ingrese el nuevo género: ");
+        this.genero = teclado.nextLine();
+    }
+
     public String getNombre() {
         return nombre;
     }

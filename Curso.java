@@ -53,6 +53,52 @@ public class Curso implements Comparable<Curso> {
         }
     }
 
+    public void agregarGrupo(int contGrupos) {
+        Grupo nuevoGrupo = new Grupo();
+        System.out.println("Datos del nuevo grupo:");
+        nuevoGrupo.capturarDatos(idCurso, contGrupos);
+        this.listaGrupos.add(nuevoGrupo);
+        this.cantidadGrupos = contGrupos;
+    }
+
+    public void modificarGrupo(ArrayList<Instructor> listaInstructores) {
+        Scanner teclado = new Scanner(System.in);
+        int i = 0, option = 0, encontrado =0;
+        String grupoBuscado = null;
+        String instructorBuscado = null;
+
+        if (listaGrupos.isEmpty()) {
+            System.out.println("No hay grupos registrados para modificar.");
+        } else {
+            System.out.println("\n----------Grupos registrados----------");
+            for (Grupo tmp : listaGrupos) {
+                System.out.println((i + 1) +  ") ID: " + tmp.getIdGrupo());
+                i++;
+            }
+            System.out.print("Escriba el ID del grupo que desea modificar: ");
+            grupoBuscado = teclado.nextLine();
+            for (Grupo tmp : listaGrupos) {
+                if (tmp.getIdGrupo().equals(grupoBuscado)) {
+                    tmp.modificarDatos();
+                    instructorBuscado = tmp.getInstructor().getIdInstructor();
+                    for (Instructor instructor : listaInstructores) {
+                        if (instructor.getIdInstructor().equals(instructorBuscado)) {
+                            encontrado = 1;
+                        }
+                    }
+                    if (encontrado == 0) {
+                        listaInstructores.add(tmp.getInstructor());
+                    }
+                    option = 100;
+                    break;
+                }
+            }
+            if (option != 100) {
+                System.out.println("No se encontró el grupo con ID: " + grupoBuscado);
+            }
+        }
+    }
+
     public String getIdCurso() {
         return idCurso;
     }
@@ -83,6 +129,14 @@ public class Curso implements Comparable<Curso> {
 
     public void setCantidadGrupos(int cantidadGrupos) {
         this.cantidadGrupos = cantidadGrupos;
+    }
+
+    public ArrayList<Grupo> getListaGrupos() {
+        return listaGrupos;
+    }
+
+    public void setListaGrupos(ArrayList<Grupo> listaGrupos) {
+        this.listaGrupos = listaGrupos;
     }
 
     @Override
