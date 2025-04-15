@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Grupo extends Curso{
+public class Grupo{
     private String idGrupo;
     private String fechaInicio;
     private Instructor instructor;
@@ -9,7 +9,6 @@ public class Grupo extends Curso{
     private int cantidadEstudiantes;
 
     public Grupo() {
-        super();
         this.idGrupo = "Sin ID";
         this.fechaInicio = "Sin fecha de inicio";
         this.instructor = new Instructor();
@@ -17,13 +16,12 @@ public class Grupo extends Curso{
         this.cantidadEstudiantes = 0;
     }
 
-    public Grupo(String idGrupo, String fechaInicio, Instructor instructor, ArrayList<Estudiante> estudiantes, int cantidadEstudiantes) {
-        super();
-        this.idGrupo = idGrupo;
+    public Grupo(String idCurso, int contGrupos, String fechaInicio, int cantidadEstudiantes) {
+        this.idGrupo = idCurso + "-" + contGrupos;
         this.fechaInicio = fechaInicio;
-        this.instructor = instructor;
-        this.estudiantes = estudiantes;
         this.cantidadEstudiantes = cantidadEstudiantes;
+        this.instructor = new Instructor();
+        this.estudiantes = new ArrayList<>();
     }
 
     public void capturarDatos(String idCurso, int contGrupos) {
@@ -39,8 +37,26 @@ public class Grupo extends Curso{
         System.out.println("\n----------Datos del grupo----------");
         System.out.println("ID del grupo: " + this.idGrupo);
         System.out.println("Fecha de inicio: " + this.fechaInicio);
-        System.out.println("Instructor: " + this.instructor.getNombre());
         System.out.println("Cantidad de estudiantes: " + this.cantidadEstudiantes);
+    }
+
+    public void presentarGrupo() {
+        int i = 0;
+
+        presentarDatos();
+        System.out.print("Instructor: " + this.instructor.getNombre());
+        System.out.println("  Edad: " + this.instructor.getEdad());
+
+        if (this.estudiantes.isEmpty()) {
+            System.out.println("No hay estudiantes registrados.");
+        } else {
+            System.out.println("\n----------Estudiantes registrados----------");
+            for (Estudiante tmp : estudiantes) {
+                System.out.printf((i + 1) + ".- ");
+                tmp.presentarDatos();
+                i++;
+            }
+        }
     }
 
     public void modificarDatos() {
@@ -72,6 +88,77 @@ public class Grupo extends Curso{
         }       
     }
 
+    public void agregarEstudiante(ArrayList<Estudiante> listaEstudiantes) {
+        Scanner teclado = new Scanner(System.in);
+        Estudiante unEstudiante = null;
+        int opcion = 0;
+
+        do {
+            unEstudiante = new Estudiante();
+            System.out.println("\nDatos del estudiante: ");
+            unEstudiante.capturarDatos(this.idGrupo, this.cantidadEstudiantes + 1);
+            this.estudiantes.add(unEstudiante);
+            listaEstudiantes.add(unEstudiante);
+            this.cantidadEstudiantes++;
+            do {
+                System.out.println("¿Desea agregar otro estudiante? (1: Sí, 2: No)");
+                if (teclado.hasNextInt()) {
+                    opcion = teclado.nextInt();
+                    teclado.nextLine();
+                    if (opcion != 1 && opcion != 2) {
+                        System.out.println("Opción inválida, intente de nuevo.");
+                        opcion = 0; 
+                    }
+                } else {
+                    System.out.println("Opción inválida, intente de nuevo.");
+                    teclado.nextLine();
+                    opcion = 0;
+                }
+            } while (opcion == 0);
+        } while (opcion == 1);
+    }
+
+    public void eliminarEstudiante() {
+        Scanner teclado = new Scanner(System.in);
+        String estudianteBuscado = null;
+        int i = 0, encontrado = 0;
+
+        if (this.estudiantes.isEmpty()) {
+            System.out.println("No hay estudiantes registrados.");
+        } else {
+            System.out.println("\n----------Estudiantes registrados----------");
+            for (Estudiante tmp : estudiantes) {
+                System.out.println((i + 1) +  ") ID: " + tmp.getIdEstudiante());
+                tmp.presentarDatos();
+                i++;
+            }
+            System.out.print("Escriba el ID del estudiante que desea eliminar: ");
+            estudianteBuscado = teclado.nextLine();
+            for (Estudiante tmp : estudiantes) {
+                if (tmp.getIdEstudiante().equals(estudianteBuscado)) {
+                    this.estudiantes.remove(tmp);
+                    this.cantidadEstudiantes--;
+                    encontrado = 1;
+                    break;
+                }
+            }
+            if (encontrado == 0) {
+                System.out.println("No se encontró el estudiante con ID: " + estudianteBuscado);
+            }
+        }
+    }
+
+    public void consultarEstudiantes() {
+        if (this.estudiantes.isEmpty()) {
+            System.out.println("No hay estudiantes registrados.");
+        } else {
+            System.out.println("\n----------Estudiantes registrados----------");
+            for (Estudiante tmp : estudiantes) {
+                tmp.consultarEstudiantes();
+            }
+        }
+    }
+
     public String getIdGrupo() {
         return idGrupo;
     }
@@ -100,8 +187,8 @@ public class Grupo extends Curso{
         return estudiantes;
     }
 
-    public void setEstudiantes(ArrayList<Estudiante> estudiantes) {
-        this.estudiantes = estudiantes;
+    public void setEstudiantes(Estudiante unEstudiante) {
+        this.estudiantes.add(unEstudiante);
     }
 
     public int getCantidadEstudiantes() {

@@ -16,9 +16,12 @@ public class Instructor extends Miembro {
         this.correoElectronico = "Sin correo electrónico";
     }
 
-    public Instructor(String nombre, int edad, String genero, String idInstructor, String gradoAcademico, String areaEspecialidad, int aniosExperiencia, String correoElectronico) {
+    public Instructor(String nombre, int edad, String genero, String gradoAcademico, String areaEspecialidad, int aniosExperiencia, String correoElectronico) {
         super(nombre, edad, genero);
-        this.idInstructor = idInstructor;
+        this.idInstructor = nombre.substring(0, 3).toUpperCase() 
+                          + edad 
+                          + nombre.substring(nombre.length() - 3).toUpperCase() 
+                          + (int) (Math.random() * 1000);
         this.gradoAcademico = gradoAcademico;
         this.areaEspecialidad = areaEspecialidad;
         this.aniosExperiencia = aniosExperiencia;

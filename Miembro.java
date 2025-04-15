@@ -63,5 +63,3 @@ public class Miembro {
         this.genero = genero;
     }
 }
-
-

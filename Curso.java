@@ -16,8 +16,10 @@ public class Curso implements Comparable<Curso> {
         this.listaGrupos = new ArrayList<>();
     }
 
-    public Curso(String idCurso, String nombreCurso, int diasDuracion, int cantidadGrupos) {
-        this.idCurso = idCurso;
+    public Curso(String nombreCurso, int diasDuracion, int cantidadGrupos) {
+        this.idCurso = nombreCurso.substring(0, 3).toUpperCase() 
+                     + (int) (Math.random() * 1000) 
+                     + nombreCurso.substring(nombreCurso.length() - 3).toUpperCase();
         this.nombreCurso = nombreCurso;
         this.diasDuracion = diasDuracion;
         this.cantidadGrupos = cantidadGrupos;
@@ -26,6 +28,7 @@ public class Curso implements Comparable<Curso> {
 
     public void capturarDatos() {
         Scanner teclado = new Scanner(System.in);
+
         System.out.print("Ingrese el nombre del curso: ");
         this.nombreCurso = teclado.nextLine();
         System.out.print("Ingrese la duración en días: ");
@@ -43,6 +46,7 @@ public class Curso implements Comparable<Curso> {
         System.out.println("Nombre del curso: " + this.nombreCurso);
         System.out.println("Duración en días: " + this.diasDuracion);
         System.out.println("Cantidad de grupos: " + this.cantidadGrupos);
+
         if (this.listaGrupos.isEmpty()) {
             System.out.println("No hay grupos registrados.");
         } else {
@@ -53,12 +57,14 @@ public class Curso implements Comparable<Curso> {
         }
     }
 
-    public void agregarGrupo(int contGrupos) {
+    public void agregarGrupo(ArrayList<Instructor> listaInstructores) {
         Grupo nuevoGrupo = new Grupo();
+
         System.out.println("Datos del nuevo grupo:");
-        nuevoGrupo.capturarDatos(idCurso, contGrupos);
+        this.cantidadGrupos++;
+        nuevoGrupo.capturarDatos(idCurso, cantidadGrupos);
+        listaInstructores.add(nuevoGrupo.getInstructor());
         this.listaGrupos.add(nuevoGrupo);
-        this.cantidadGrupos = contGrupos;
     }
 
     public void modificarGrupo(ArrayList<Instructor> listaInstructores) {
@@ -94,6 +100,118 @@ public class Curso implements Comparable<Curso> {
                 }
             }
             if (option != 100) {
+                System.out.println("No se encontró el grupo con ID: " + grupoBuscado);
+            }
+        }
+    }
+
+    public void consultarGrupo() {
+        Scanner teclado = new Scanner(System.in);
+        int i = 0, opcion = 0;
+        String grupoBuscado = null;
+
+        if (listaGrupos.isEmpty()) {
+            System.out.println("No hay grupos registrados.");
+        } else {
+            System.out.println("\n----------Grupos registrados----------");
+            for (Grupo tmp : listaGrupos) {
+                System.out.println((i + 1) +  ") ID: " + tmp.getIdGrupo());
+                i++;
+            }
+            System.out.print("Escriba el ID del grupo que desea consultar: ");
+            grupoBuscado = teclado.nextLine();
+            for (Grupo tmp : listaGrupos) {
+                if (tmp.getIdGrupo().equals(grupoBuscado)) {
+                    tmp.presentarGrupo();
+                    opcion = 100;
+                    break;
+                }
+            }
+            if (opcion != 100) {
+                System.out.println("No se encontró el grupo con ID: " + grupoBuscado);
+            }
+        }
+    }
+
+    public void agregarEstudiante(ArrayList<Estudiante> listaEstudiantes) {
+        Scanner teclado = new Scanner(System.in);
+        String grupoBuscado = null;
+        int i = 0, encontrado = 0;
+
+        if (listaGrupos.isEmpty()) {
+            System.out.println("No hay grupos registrados.");
+        } else {
+            System.out.println("\n----------Grupos registrados----------");
+            for (Grupo tmp : listaGrupos) {
+                System.out.println((i + 1) +  ") ID: " + tmp.getIdGrupo());
+                i++;
+            }
+            System.out.print("Escriba el ID del grupo al que desea agregar un estudiante: ");
+            grupoBuscado = teclado.nextLine();
+            for (Grupo tmp : listaGrupos) {
+                if (tmp.getIdGrupo().equals(grupoBuscado)) {
+                    tmp.agregarEstudiante(listaEstudiantes);
+                    encontrado = 1;
+                    break;
+                }
+            }
+            if (encontrado == 0) {
+                System.out.println("No se encontró el grupo con ID: " + grupoBuscado);
+            }
+        }
+    }
+
+    public void eliminarEstudiante() {
+        Scanner teclado = new Scanner(System.in);
+        String grupoBuscado = null;
+        int i = 0, encontrado = 0;
+
+        if (listaGrupos.isEmpty()) {
+            System.out.println("No hay grupos registrados.");
+        } else {
+            System.out.println("\n----------Grupos registrados----------");
+            for (Grupo tmp : listaGrupos) {
+                System.out.println((i + 1) +  ") ID: " + tmp.getIdGrupo());
+                i++;
+            }
+            System.out.print("Escriba el ID del grupo al que desea eliminar un estudiante: ");
+            grupoBuscado = teclado.nextLine();
+            for (Grupo tmp : listaGrupos) {
+                if (tmp.getIdGrupo().equals(grupoBuscado)) {
+                    tmp.eliminarEstudiante();
+                    encontrado = 1;
+                    break;
+                }
+            }
+            if (encontrado == 0) {
+                System.out.println("No se encontró el grupo con ID: " + grupoBuscado);
+            }
+        }
+    }
+
+    public void consultarEstudiantes() {
+        Scanner teclado = new Scanner(System.in);
+        String grupoBuscado = null;
+        int i = 0, encontrado = 0;
+
+        if (listaGrupos.isEmpty()) {
+            System.out.println("No hay grupos registrados.");
+        } else {
+            System.out.println("\n----------Grupos registrados----------");
+            for (Grupo tmp : listaGrupos) {
+                System.out.println((i + 1) +  ") ID: " + tmp.getIdGrupo());
+                i++;
+            }
+            System.out.print("Escriba el ID del grupo al que desea consultar los estudiantes: ");
+            grupoBuscado = teclado.nextLine();
+            for (Grupo tmp : listaGrupos) {
+                if (tmp.getIdGrupo().equals(grupoBuscado)) {
+                    tmp.consultarEstudiantes();
+                    encontrado = 1;
+                    break;
+                }
+            }
+            if (encontrado == 0) {
                 System.out.println("No se encontró el grupo con ID: " + grupoBuscado);
             }
         }
@@ -135,8 +253,8 @@ public class Curso implements Comparable<Curso> {
         return listaGrupos;
     }
 
-    public void setListaGrupos(ArrayList<Grupo> listaGrupos) {
-        this.listaGrupos = listaGrupos;
+    public void setListaGrupos(Grupo unGrupo) {
+        this.listaGrupos.add(unGrupo);
     }
 
     @Override
